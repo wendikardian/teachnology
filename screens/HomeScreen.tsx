@@ -129,7 +129,7 @@ const HomeScreen: React.FC<Types> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text style={styles.xlText}>Rusty.</Text>
+        <Text style={styles.xlText}>Teachnology</Text>
         <TouchableOpacity>
           <Icon name={'mail-unread-outline'} color={'#1D1A20'} size={30} />
         </TouchableOpacity>

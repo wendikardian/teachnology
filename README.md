@@ -36,7 +36,3 @@ I used `React Native`, `Firebase`, `Typescript`...
 - run `npm run android || npm run ios`
 
 
-## License
-
-MIT license @ [Emre Kalfa](https://github.com/rustysym)
- 
