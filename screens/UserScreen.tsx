@@ -83,7 +83,10 @@ const UserScreen: React.FC<Types> = ({navigation, route}) => {
   };
   useEffect(() => {
     getUser();
+    setTimeout(() => {
+
     fetchUserPost();
+    },1000)
   }, [route.params?.userId]);
 
   return (
