@@ -430,5 +430,41 @@ export default StyleSheet.create({
     paddingLeft:'10%',
     zIndex:1,
     bottom:15,
+  }, exploreAvatar: {
+    borderRadius: 50,
+    marginHorizontal: 5,
+    height: 68,
+    width: 68,
+  
+  }, exploreAvatarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: '5%',
+    marginVertical: '2%',
+    // add border shadow and grey background color
+    borderRadius: 10,
+    backgroundColor: 'lightgrey',
+    shadowColor: 'black',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    // padding
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+  },exploreAvatarTextContainer :{
+    flexDirection: 'column',
+    paddingLeft: 6,
+  
+  }, exploreAvatarText : {
+    fontWeight: '600',
+    color: '#1D1A20',
+// family and style more beautiful please
+    fontFamily: 'GeneralSans-Medium',
+    fontSize: 18,
+  
   }
+  
 });

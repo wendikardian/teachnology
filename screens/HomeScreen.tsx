@@ -98,7 +98,9 @@ const HomeScreen: React.FC<Types> = ({navigation}) => {
     <PostItem
       item={item}
       onDelete={handleDelete}
-      onPress={() => navigation.navigate('User', {userId: item.userId})}
+      onPress={() =>{ navigation.navigate('User', {userId: item.userId})
+      console.log(item.userId)
+    }}
     />
   );
   const memoizedValue = useMemo(() => renderItem, [posts]);

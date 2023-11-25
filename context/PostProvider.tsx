@@ -23,6 +23,7 @@ interface Types {
 }
 export const PostProvider: React.FC<Types> = ({children}) => {
   const [posts, setPosts] = useState<Posts[]>();
+  const [users, setUsers] = useState<Posts[]>();
   const [userPosts, setUserPosts] = useState<Posts[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -54,6 +55,32 @@ export const PostProvider: React.FC<Types> = ({children}) => {
             }),
           );
           setPosts(list);
+          setLoading(false);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const q = query(
+        collection(firestore, 'users'),
+        orderBy('id', 'desc'),
+      );
+      onSnapshot(q, snapshot => {
+        const list: any = [];
+        snapshot.forEach(async doc => {
+          const {email, fName, id} = doc.data();
+          await Promise.all(
+            list.push({
+              userId: doc.id,
+              email : email,
+              fName: fName,
+            }),
+          );
+          setUsers(list);
           setLoading(false);
         });
       });
@@ -108,6 +135,9 @@ export const PostProvider: React.FC<Types> = ({children}) => {
         deleted,
         setDeleted,
         userPosts,
+        users,
+        setUsers,
+        fetchUsers
       }}>
       {children}
     </PostContext.Provider>
