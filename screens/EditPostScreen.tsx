@@ -26,8 +26,12 @@ const EditPostScreen: React.FC<Params> = ({route, navigation}) => {
     try {
       const imageUrl = await uploadImage();
       await addDoc(collection(firestore, 'posts'), {
+        
+        // createRandomgeneratedId int must unique
+        id: Math.floor(Math.random() * 100000000),
         userId: user.uid,
         postImage: imageUrl,
+        // postImage: 'https://marketplace.canva.com/EAFRWLkkJIU/1/0/1600w/canva-white-and-orange-minimalist-instagram-profile-picture-c90IYqhFSLI.jpg',
         post: text,
         postTime: Timestamp.fromDate(new Date()),
         likes: null,
@@ -53,6 +57,7 @@ const EditPostScreen: React.FC<Params> = ({route, navigation}) => {
       await uploadBytes(docRef, bytes);
       Alert.alert('Post published');
       const url = await getDownloadURL(docRef);
+      console.log(url)
       return url;
     } catch (e) {
       console.log(e);
