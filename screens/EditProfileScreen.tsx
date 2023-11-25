@@ -75,12 +75,15 @@ const EditProfileScreen = () => {
       country: userData.country || null,
       city: userData.city || null,
       userImg: imgUrl,
+      id: user?.uid,
+      email: user?.email,
     }).then(() => {
       console.log('User Updated!');
       Alert.alert(
         'Profile Updated!',
         'Your profile has been updated successfully.',
       );
+      
     });
   };
   useEffect(() => {

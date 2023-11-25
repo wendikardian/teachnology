@@ -72,12 +72,13 @@ export const PostProvider: React.FC<Types> = ({children}) => {
       onSnapshot(q, snapshot => {
         const list: any = [];
         snapshot.forEach(async doc => {
-          const {email, fName, id} = doc.data();
+          const {email, fName, id, userImg} = doc.data();
           await Promise.all(
             list.push({
               userId: doc.id,
               email : email,
               fName: fName,
+              userImg : userImg
             }),
           );
           setUsers(list);

@@ -32,7 +32,7 @@ export const UserProvider: React.FC<User> = ({children}) => {
           await setDoc(docRef, {
             // id: 
             id: user.uid, 
-            fName: '',
+            fName: name,
             lName: '',
             email: email,
             createdAt: Timestamp.fromDate(new Date()),

@@ -62,8 +62,8 @@ export default function Tabs() {
               );
             } else if (route.name === 'Notifications') {
               iconName = focused
-                ? 'ios-notifications-sharp'
-                : 'ios-notifications-outline';
+                ? 'ios-document-sharp'
+                : 'ios-document-outline';
             } else if (route.name === 'User') {
               iconName = focused ? 'ios-person' : 'ios-person-outline';
             }
@@ -90,7 +90,6 @@ export default function Tabs() {
         <Tab.Screen
           name="Notifications"
           component={Notifications}
-          options={{tabBarBadge: 3}}
         />
         <Tab.Screen
           name="User"

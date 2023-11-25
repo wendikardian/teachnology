@@ -79,8 +79,11 @@ const Explore: React.FC<Types> = ({navigation, route}) => {
                 }}>
                 <View>
                   <Image
-                    source={{
-                      uri: 'https://www.shareicon.net/data/512x512/2016/05/24/770117_people_512x512.png',
+                     source={{
+                      uri: item
+                        ? item?.userImg ||
+                          'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+                        : 'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg',
                     }}
                     style={styles.exploreAvatar}
                   />
