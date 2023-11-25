@@ -30,6 +30,8 @@ export const UserProvider: React.FC<User> = ({children}) => {
 
           const docRef = doc(firestore, 'users', user.uid);
           await setDoc(docRef, {
+            // id: 
+            id: user.uid, 
             fName: '',
             lName: '',
             email: email,
