@@ -22,9 +22,9 @@ interface Types {
   deleteArticle?: (articleId: any) => Promise<any>;
 }
 export const ArticleProvider: React.FC<Types> = ({children}) => {
-  const [articles, setArticles] = useState<Posts[]>();
-  const [users, setUsers] = useState<Posts[]>();
-  const [userPosts, setUserPosts] = useState<Posts[]>();
+  const [articles, setArticles] = useState([]);
+  const [users, setUsers] = useState();
+  const [userPosts, setUserPosts] = useState();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
@@ -50,6 +50,7 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
             id,
             userId,
           } = doc.data();
+            console.log('doc', doc.data());
           await Promise.all(
             list.push({
               id: id,
@@ -61,7 +62,9 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
               postTime: postTime,
             }),
           );
+
           setArticles(list);
+          console.log(articles);
           setLoading(false);
         });
       });

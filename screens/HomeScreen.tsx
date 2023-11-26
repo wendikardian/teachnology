@@ -33,6 +33,7 @@ const HomeScreen: React.FC<Types> = ({navigation}) => {
     deleted,
     setDeleted,
   } = useContext(PostContext);
+
   const avatarApi = async () => {
     try {
       const data = await fetch(apiUrl, {
@@ -52,6 +53,7 @@ const HomeScreen: React.FC<Types> = ({navigation}) => {
   
   useEffect(() => {
     fetchPost();
+    console.log(posts);
     avatarApi();
     setLoading(false);
   }, []);

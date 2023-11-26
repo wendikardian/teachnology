@@ -24,6 +24,7 @@ interface Types {
 export const PostProvider: React.FC<Types> = ({children}) => {
   const [posts, setPosts] = useState<Posts[]>();
   const [users, setUsers] = useState<Posts[]>();
+  const [articles, setArticles] = useState<Posts[]>();
   const [userPosts, setUserPosts] = useState<Posts[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -123,6 +124,49 @@ export const PostProvider: React.FC<Types> = ({children}) => {
     });
   };
 
+  const fetchArticle = async () => {
+    setLoading(true);
+    console.log('fetching');
+    try {
+      const q = query(
+        collection(firestore, 'articles'),
+        orderBy('postTime', 'desc'),
+      );
+      onSnapshot(q, snapshot => {
+        const list: any = [];
+        snapshot.forEach(async doc => {
+          const {
+            articleDescription,
+            articleImg,
+            postTime,
+            articleTitle,
+            email,
+            id,
+            userId,
+          } = doc.data();
+            console.log('doc', doc.data());
+          await Promise.all(
+            list.push({
+              id: id,
+              userId: userId,
+              email: email,
+              articleTitle: articleTitle,
+              articleDescription: articleDescription,
+              articleImg: articleImg,
+              postTime: postTime,
+            }),
+          );
+
+          setArticles(list);
+          console.log(articles);
+          setLoading(false);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <PostContext.Provider
       value={{
@@ -138,7 +182,10 @@ export const PostProvider: React.FC<Types> = ({children}) => {
         userPosts,
         users,
         setUsers,
-        fetchUsers
+        fetchUsers,
+        articles,
+        fetchArticle,
+
       }}>
       {children}
     </PostContext.Provider>

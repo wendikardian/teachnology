@@ -41,6 +41,21 @@ interface Posts  {
   
 }
 
+interface Articles  {
+  index?:any,
+  id?: string,
+  userId?:any,
+  userName?: string,
+  userImage?: string,
+  postTime?: any,
+  post?:string,
+  postImage?:string | null,
+  liked?:boolean,
+  likes?:number,
+  comments?:number,
+  
+}
+
 //@env types
 declare module '@env' {
   export const FB_API_KEY: string;

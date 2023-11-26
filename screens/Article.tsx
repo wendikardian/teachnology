@@ -5,14 +5,16 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import PostLoader from '../components/PostLoader';
 import {ArticleContext} from '../context/ArticleContext';
+import {PostContext} from '../context/PostContext';
 import {UserContext} from '../context/UserContext';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../config/Styles';
+import ArticleItem from '../components/ArticleItem';
 import {firestore} from '../config/FirebaseConfig';
 import {
   collection,
@@ -24,6 +26,7 @@ import {
   where,
 } from 'firebase/firestore';
 import {useContext, useEffect, useState, useMemo} from 'react';
+import {Alert} from 'react-native';
 interface Types {
   navigation: any;
   route: any;
@@ -36,45 +39,64 @@ type Props = {
 const Article = (props: Props) => {
   const {navigation, route} = props;
   const {userData} = useContext(UserContext);
-  const {fetchArticle, setLoading, loading, articles} =
-    useContext(ArticleContext);
+
+  const {
+    articles,
+    fetchArticle,
+    setLoading,
+    loading,
+    setIsOpen,
+    deleteArticle,
+  } = useContext(ArticleContext);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  // useEffect(() => {
+  //   // event listener when screen is accessed
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchArticle();
+  //     setTimeout(() => {
+  //       console.log(articles);
+  //     }, 2500);
+  //   });
+  //   return unsubscribe;
+  // }, []);
   useEffect(() => {
     fetchArticle();
     setLoading(false);
-    console.log(articles);
   }, []);
+  const handleDelete = (articleId: any) => {
+    Alert.alert(
+      'Delete Post',
+      'Are you sure ?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => setIsOpen(false),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: () => deleteArticle(articleId),
+        },
+      ],
+      {cancelable: false},
+    );
+  };
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    fetchArticle();
+    const data = fetchArticle();
+    // console.log('data',data);
     setRefreshing(false);
   }, [refreshing]);
-  const renderItem = ({item}: {item: Articles}) => 
-{
-  return (
-    <TouchableOpacity
-      style={styles.exploreAvatarContainer}
+  const renderItem = ({item}: {item: Articles}) => (
+    <ArticleItem
+      item={item}
+      onDelete={handleDelete}
       onPress={() => {
-        console.log(item.id);
-        navigation.navigate('ArticleDetail', {articleId: item.id});
-      }}>
-      <View>
-        <Image
-          source={{
-            uri: item.articleImg,
-          }}
-          style={styles.exploreAvatar}
-        />
-      </View>
-      <View style={styles.exploreAvatarTextContainer}>
-        <Text style={styles.exploreAvatarText}>{item.articleTitle}</Text>
-        <Text style={styles.exploreAvatarText}>{item.articleDescription}</Text>
-      </View>
-    </TouchableOpacity>
+        navigation.navigate('User', {userId: item.userId});
+        console.log(item.userId);
+      }}
+    />
   );
-        
-}
-  ;
   const memoizedValue = useMemo(() => renderItem, [articles]);
   return (
     <View style={[styles.flexContainer, {paddingTop: '20%'}]}>
@@ -96,9 +118,12 @@ const Article = (props: Props) => {
             placeholderTextColor={'#AEAEAE'}
           />
         </View>
-        {loading ? (
-          <PostLoader />
-        ) : (
+        {/* <Text>
+
+          { articles.length > 0 ?
+          articles[0].articleTitle : 'No Articles'}
+        </Text> */}
+        {articles.length > 0 ? null : (
           <FlatList
             data={articles}
             keyExtractor={(item, index) => index.toString()}
@@ -112,6 +137,7 @@ const Article = (props: Props) => {
             renderItem={memoizedValue}
           />
         )}
+
         {/* Create button to create article */}
       </View>
       <TouchableOpacity
