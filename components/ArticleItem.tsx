@@ -106,11 +106,9 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
                 {userData ? userData.lName || 'User' : 'User'}
               </Text>
             </TouchableOpacity>
-            <Text style={styles.postCreateText}>created a new post</Text>
+
           </View>
-          <Text style={styles.postCreateTimeText}>
-            {/* {moment(item.postTime.toDate()).fromNow()} */}
-          </Text>
+          
         </View>
         <View style={styles.postIconContainer}>
           <TouchableOpacity
@@ -119,6 +117,12 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
             <Entypo name={'dots-three-horizontal'} color={'gray'} size={20} />
           </TouchableOpacity>
         </View>
+      </View>
+      <View style={styles.postText}>
+        <Text style={{color: 'black'
+        , fontWeight: 'bold', fontSize: 20, marginBottom: 10, marginTop: 10
+    }}>{item.articleTitle}</Text>
+        <Text style={{color: 'black'}}>{item.articleDescription}</Text>
       </View>
       <View style={{alignSelf: 'center', marginTop: 12, zIndex: -1}}>
         {item.postImage !== null ? (
@@ -130,10 +134,7 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
           />
         ) : null}
       </View>
-      <View style={styles.postText}>
-        <Text style={{color: 'black'}}>{item.articleTitle}</Text>
-        <Text style={{color: 'black'}}>{item.articleDescription}</Text>
-      </View>
+      
       <View style={styles.postBottom}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity>

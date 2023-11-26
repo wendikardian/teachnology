@@ -69,7 +69,7 @@ const AddArticle = () => {
       imgUrl = userData.userImg;
     }
 
-    setDoc(doc(firestore, 'articles', user?.uid), {
+    await addDoc(collection(firestore, 'articles'), {
 
       id: Math.random().toString(36).substr(2, 9),
       userId: user?.uid,

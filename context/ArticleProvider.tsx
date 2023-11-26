@@ -10,7 +10,9 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
 } from 'firebase/firestore';
+
 import {deleteObject, ref} from 'firebase/storage';
 import {Alert} from 'react-native';
 
@@ -53,7 +55,8 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
             console.log('doc', doc.data());
           await Promise.all(
             list.push({
-              id: id,
+
+              id: doc.id,
               userId: userId,
               email: email,
               articleTitle: articleTitle,
@@ -100,13 +103,15 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
   const deleteArticle = async (articleId: any): Promise<any> => {
     const colRef = collection(firestore, 'articles');
     const docRef = doc(colRef, `${articleId}`);
+    // filter the document based on id field 
+    // const docRef = query(colRef, where('id', '==', articleId));
     const snap = await getDoc(docRef);
 
     if (snap.exists()) {
-      const {postImage} = snap.data();
+      const {articleImg} = snap.data();
 
-      const storageRef = ref(storage, postImage);
-      if (postImage !== null) {
+      const storageRef = ref(storage, articleImg);
+      if (articleImg !== null) {
         deleteObject(storageRef)
           .then(() => {
             deleteFirestoreData(articleId);
@@ -137,6 +142,7 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
         loading,
         setLoading,
         articles,
+        setArticles,
         deleteArticle,
         setIsOpen,
         isOpen,

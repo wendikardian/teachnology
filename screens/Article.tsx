@@ -39,7 +39,18 @@ type Props = {
 const Article = (props: Props) => {
   const {navigation, route} = props;
   const {userData} = useContext(UserContext);
-
+  const [search, setSearch] = useState<string>('');
+  const [data, setData] = useState<any>([
+    {
+      id: '1',
+      userId: '1',
+      email: 'wendi',
+      articleTitle: 'title',
+      articleDescription: 'description',
+      articleImg: 'https://picsum.photos/200/300',
+      postTime: 'time',
+    },
+  ]);
   const {
     articles,
     fetchArticle,
@@ -47,18 +58,40 @@ const Article = (props: Props) => {
     loading,
     setIsOpen,
     deleteArticle,
+    setArticles,
   } = useContext(ArticleContext);
+
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  // useEffect(() => {
-  //   // event listener when screen is accessed
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     fetchArticle();
-  //     setTimeout(() => {
-  //       console.log(articles);
-  //     }, 2500);
-  //   });
-  //   return unsubscribe;
-  // }, []);
+  useEffect(() => {
+    // event listener when screen is accessed
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchArticle();
+      setTimeout(() => {
+        console.log(articles);
+      }, 2500);
+      setArticles([
+        {
+          id: 1,
+          userId: '1',
+          email: 'wendi',
+          articleTitle: 'title',
+          articleDescription: 'description',
+          articleImg: 'https://picsum.photos/200/300',
+          postTime: 'time',
+        },
+        {
+          id: 2,
+          userId: '2',
+          email: 'wendi',
+          articleTitle: 'title',
+          articleDescription: 'description',
+          articleImg: 'https://picsum.photos/200/300',
+          postTime: 'time',
+        },
+      ]);
+    });
+    return unsubscribe;
+  }, []);
   useEffect(() => {
     fetchArticle();
     setLoading(false);
@@ -81,6 +114,20 @@ const Article = (props: Props) => {
       {cancelable: false},
     );
   };
+  const filterData = (text: string) => {
+    if(text.length === 0){
+      fetchArticle();
+    }
+    const newData = articles.filter((item: any) => {
+      const itemData = item.articleTitle
+        ? item.articleTitle.toUpperCase()
+        : ''.toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setArticles(newData);
+    setSearch(text);
+  }
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     const data = fetchArticle();
@@ -96,6 +143,7 @@ const Article = (props: Props) => {
         console.log(item.userId);
       }}
     />
+    // <Text>{item.articleTitle}</Text>
   );
   const memoizedValue = useMemo(() => renderItem, [articles]);
   return (
@@ -116,28 +164,37 @@ const Article = (props: Props) => {
             style={styles.exploreSearchInput}
             placeholder={'What are you looking for?'}
             placeholderTextColor={'#AEAEAE'}
+            value={search}
+            // onChangeText={text => setSearch(text)}
+            onChangeText={text => {filterData(text)}}
           />
+          {/* {data.length > 0 ? null : ( */}
+
+          {/* )} */}
         </View>
         {/* <Text>
 
           { articles.length > 0 ?
           articles[0].articleTitle : 'No Articles'}
         </Text> */}
-        {articles.length > 0 ? null : (
+
+        <View
+          style={{
+            //  backgroundColor: 'red',
+            padding: 30,
+          }}>
           <FlatList
             data={articles}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.postContainer}
-            initialNumToRender={3}
-            contentContainerStyle={{paddingBottom: 5}}
+            keyExtractor={item => item.id}
+            // initialNumToRender={3}
+            // contentContainerStyle={{paddingBottom: 5}}
             showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             renderItem={memoizedValue}
           />
-        )}
-
+        </View>
         {/* Create button to create article */}
       </View>
       <TouchableOpacity
