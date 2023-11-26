@@ -25,18 +25,52 @@ interface Types {
   navigation: any;
   route: any;
 }
-type Props = {}
+type Props = {
+  navigation: any; 
+  route: any; 
+};
 
 const Article = (props: Props) => {
+  const {navigation, route} = props;
   return (
     <View style={[styles.flexContainer, {paddingTop: '20%'}]}>
-    <View>
-      <Text style={styles.xxlText}>Explore Article</Text>
-      
+      <View>
+        <Text style={styles.xxlText}>Find Article</Text>
+        <View
+          style={{
+            marginBottom: 30,
+          }}>
+          <Ionicons
+            name="ios-search-outline"
+            color={'#AEAEAE'}
+            size={20}
+            style={styles.exploreSearchIcon}
+          />
+          <TextInput
+            style={styles.exploreSearchInput}
+            placeholder={'What are you looking for?'}
+            placeholderTextColor={'#AEAEAE'}
+          />
+        </View>
+        {/* Create button to create article */}
+      </View>
+        <TouchableOpacity
+          style={styles.buttonCreate}
+          onPress={() => {
+            console.log('Create Article');
+            navigation.navigate('AddArticle');
+          }}>
+         
+            <Ionicons
+              name="add-circle"
+              color={'black'}
+              size={56}
+              style={styles.exploreAvatar}
+            />
+
+        </TouchableOpacity>
     </View>
-  </View>
-  )
-}
+  );
+};
 
-export default Article
-
+export default Article;

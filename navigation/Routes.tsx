@@ -8,6 +8,7 @@ import {UserProvider} from '../context/UserProvider';
 import {createStackNavigator} from '@react-navigation/stack';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import EditPostScreen from '../screens/EditPostScreen';
+import AddArticle from '../screens/AddArticle';
 
 const stack = createStackNavigator();
 function Routes() {
@@ -31,6 +32,7 @@ function Routes() {
                   component={EditProfileScreen}
                 />
                 <stack.Screen name="EditPost" component={EditPostScreen} options={{headerShown:true,headerTitle:"Edit"}}/>
+                <stack.Screen name="AddArticle" component={AddArticle} options={{headerShown:false,headerTitle:"Edit"}}/>
               </stack.Navigator>
             </>
           ) : (

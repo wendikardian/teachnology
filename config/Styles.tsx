@@ -465,6 +465,20 @@ export default StyleSheet.create({
     fontFamily: 'GeneralSans-Medium',
     fontSize: 18,
   
+  }, buttonCreate: {
+    // position stick on button right
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    bottom: 20,
+    right: '1%',
+
+    width: 90,
+    height: 45,
+    borderRadius: 20,
+    justifyContent: 'center',
+
+
+
   }
   
 });
