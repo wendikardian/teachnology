@@ -8,7 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 //screens
 import HomeScreen from '../screens/HomeScreen';
 import UserScreen from '../screens/UserScreen';
-import Notifications from '../screens/Notifications';
+import Article from '../screens/Article';
 import Explore from '../screens/Explore';
 import AddScreen from '../screens/AddScreen';
 import {TabActions, useNavigation} from '@react-navigation/native';
@@ -17,7 +17,7 @@ export type RootStackParamList = {
   Explore: undefined;
   Add: undefined;
   Feature: undefined;
-  Notifications: undefined;
+  Article: undefined;
   Home: undefined;
   User: {userId: any} | undefined;
 };
@@ -60,7 +60,7 @@ export default function Tabs() {
                   <Ionicons name="add-circle" color={'black'} size={56} />
                 </View>
               );
-            } else if (route.name === 'Notifications') {
+            } else if (route.name === 'Article') {
               iconName = focused
                 ? 'ios-document-sharp'
                 : 'ios-document-outline';
@@ -88,8 +88,8 @@ export default function Tabs() {
         <Tab.Screen name="Explore" component={Explore} />
         <Tab.Screen name="Add" component={AddScreen} />
         <Tab.Screen
-          name="Notifications"
-          component={Notifications}
+          name="Article"
+          component={Article}
         />
         <Tab.Screen
           name="User"
