@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {PostProvider} from '../context/PostProvider';
+import { ArticleProvider } from '../context/ArticleProvider';
 import {AuthContext} from '../context/AuthContext';
 import {StackNavigationProp} from '@react-navigation/stack';
 //screens
@@ -28,6 +29,7 @@ export default function Tabs() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
+    <ArticleProvider>
     <PostProvider>
       <Tab.Navigator
         initialRouteName="Home"
@@ -104,5 +106,6 @@ export default function Tabs() {
         />
       </Tab.Navigator>
     </PostProvider>
+    </ArticleProvider>
   );
 }

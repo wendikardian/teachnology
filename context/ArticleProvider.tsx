@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react';
 import {firestore, storage} from '../config/FirebaseConfig';
-import {PostContext} from './PostContext';
+import {ArticleContext} from './ArticleContext';
 import {AuthContext} from './AuthContext';
 import {
   collection,
@@ -16,13 +16,13 @@ import {Alert} from 'react-native';
 
 interface Types {
   children: React.ReactNode;
-  fetchPost?: () => Promise<any>;
+  fetchArticle?: () => Promise<any>;
   fetchUserPost?: () => Promise<any>;
   updates?: any;
-  deletePost?: (postId: any) => Promise<any>;
+  deleteArticle?: (articleId: any) => Promise<any>;
 }
 export const ArticleProvider: React.FC<Types> = ({children}) => {
-  const [posts, setPosts] = useState<Posts[]>();
+  const [articles, setArticles] = useState<Posts[]>();
   const [users, setUsers] = useState<Posts[]>();
   const [userPosts, setUserPosts] = useState<Posts[]>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,31 +30,38 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
   const [deleted, setDeleted] = useState<boolean>(false);
   const {user} = useContext(AuthContext);
 
-  const fetchPost = async () => {
+  const fetchArticle = async () => {
     setLoading(true);
+    console.log('fetching');
     try {
       const q = query(
-        collection(firestore, 'posts'),
+        collection(firestore, 'articles'),
         orderBy('postTime', 'desc'),
       );
       onSnapshot(q, snapshot => {
         const list: any = [];
         snapshot.forEach(async doc => {
-          const {post, postImage, postTime, userId} = doc.data();
+          const {
+            articleDescription,
+            articleImg,
+            postTime,
+            articleTitle,
+            email,
+            id,
+            userId,
+          } = doc.data();
           await Promise.all(
             list.push({
-              id: doc.id,
+              id: id,
               userId: userId,
-              userName: user?.displayName,
+              email: email,
+              articleTitle: articleTitle,
+              articleDescription: articleDescription,
+              articleImg: articleImg,
               postTime: postTime,
-              post: post,
-              postImage: postImage,
-              liked: false,
-              likes: 0,
-              comments: 0,
             }),
           );
-          setPosts(list);
+          setArticles(list);
           setLoading(false);
         });
       });
@@ -65,10 +72,7 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const q = query(
-        collection(firestore, 'users'),
-        orderBy('id', 'desc'),
-      );
+      const q = query(collection(firestore, 'users'), orderBy('id', 'desc'));
       onSnapshot(q, snapshot => {
         const list: any = [];
         snapshot.forEach(async doc => {
@@ -76,9 +80,9 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
           await Promise.all(
             list.push({
               userId: doc.id,
-              email : email,
+              email: email,
               fName: fName,
-              userImg : userImg
+              userImg: userImg,
             }),
           );
           setUsers(list);
@@ -90,9 +94,9 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
     }
   };
 
-  const deletePost = async (postId: any): Promise<any> => {
-    const colRef = collection(firestore, 'posts');
-    const docRef = doc(colRef, `${postId}`);
+  const deleteArticle = async (articleId: any): Promise<any> => {
+    const colRef = collection(firestore, 'articles');
+    const docRef = doc(colRef, `${articleId}`);
     const snap = await getDoc(docRef);
 
     if (snap.exists()) {
@@ -102,35 +106,35 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
       if (postImage !== null) {
         deleteObject(storageRef)
           .then(() => {
-            deleteFirestoreData(postId);
+            deleteFirestoreData(articleId);
           })
           .catch(e => {
             console.log('error', e);
           });
       } else {
         console.log('else return');
-        deleteFirestoreData(postId);
+        deleteFirestoreData(articleId);
       }
     }
   };
-  const deleteFirestoreData = (postId: any) => {
-    const colRef = collection(firestore, 'posts');
-    const docRef = doc(colRef, postId);
+  const deleteFirestoreData = (articleId: any) => {
+    const colRef = collection(firestore, 'articles');
+    const docRef = doc(colRef, articleId);
     deleteDoc(docRef).then(() => {
-      Alert.alert('Post Deleted');
+      Alert.alert('Article has been Deleted');
       setDeleted(true);
       setIsOpen(false);
     });
   };
 
   return (
-    <PostContext.Provider
+    <ArticleContext.Provider
       value={{
-        fetchPost,
+        fetchArticle,
         loading,
         setLoading,
-        posts,
-        deletePost,
+        articles,
+        deleteArticle,
         setIsOpen,
         isOpen,
         deleted,
@@ -138,9 +142,9 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
         userPosts,
         users,
         setUsers,
-        fetchUsers
+        fetchUsers,
       }}>
       {children}
-    </PostContext.Provider>
+    </ArticleContext.Provider>
   );
 };
