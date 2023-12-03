@@ -156,8 +156,7 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, props, onPress}) => {
                 userId: item.userId,
                 likes: item.likes,
                 comments: item.comments,
-                createdAt: item.createdAt,
-                updatedAt: item.updatedAt,
+                postTime : item.postTime,
               }})
             }}>
             <Ionicons name={'newspaper-outline'} color={'gray'} size={24} />
