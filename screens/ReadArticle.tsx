@@ -23,7 +23,10 @@ import {
   orderBy,
   query,
   where,
+  addDoc,
+  Timestamp,
 } from 'firebase/firestore';
+import {AuthContext} from '../context/AuthContext';
 import {useContext, useEffect, useState, useMemo} from 'react';
 import {Alert} from 'react-native';
 interface Types {
@@ -40,8 +43,9 @@ const ReadArticle = (props: Props) => {
   const {navigation, route} = props;
   // get data article from route
   const {articles} = route.params;
-  console.log(articles);
-
+  const {user} = useContext(AuthContext);
+  const [inputComment, setInputComment] = useState<string>('');
+    console.log(articles)
   const {userData} = useContext(UserContext);
   const [data, setData] = useState<any>([
     {
@@ -56,6 +60,24 @@ const ReadArticle = (props: Props) => {
   ]);
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const handleSubmit = async () => {
+    await addDoc(collection(firestore, 'comment_articles'), {
+      id: Math.random().toString(36).substr(2, 9),
+      userId: user?.uid,
+      email: user?.email,
+      comment: inputComment,
+      postTime: Timestamp.fromDate(new Date()),
+      articlesId : articles.articleId,
+    }).then(() => {
+        setInputComment('');
+      console.log('Comment has been published!');
+      Alert.alert(
+        'Comment Published!',
+        'Your Comment has been published successfully!',
+      );
+    });
+  };
 
   return (
     <View style={[styles.flexContainer, {paddingTop: '20%'}]}>
@@ -122,8 +144,14 @@ const ReadArticle = (props: Props) => {
               }}
               placeholder={'Write a comment...'}
               placeholderTextColor={'gray'}
+              value={inputComment}
+              onChangeText={text => setInputComment(text)}
             />
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => {
+                    handleSubmit();
+                }}
+            >
               <Ionicons name={'send-outline'} color={'gray'} size={24} />
             </TouchableOpacity>
           </View>
@@ -176,8 +204,7 @@ const ReadArticle = (props: Props) => {
                       color: 'black',
                       width: 250,
                     }}>
-                    lorem ipsum dolor sit amet,
-                     consectetur adipiscing elit, sed
+                    lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua.
                   </Text>
