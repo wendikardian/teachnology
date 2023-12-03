@@ -150,8 +150,6 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
   const deleteArticle = async (articleId: any): Promise<any> => {
     const colRef = collection(firestore, 'articles');
     const docRef = doc(colRef, `${articleId}`);
-    // filter the document based on id field 
-    // const docRef = query(colRef, where('id', '==', articleId));
     const snap = await getDoc(docRef);
 
     if (snap.exists()) {
@@ -181,6 +179,16 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
       setIsOpen(false);
     });
   };
+  
+  const deleteComment = (commentId: any) => {
+    const colRef = collection(firestore, 'comment_articles');
+    const docRef = doc(colRef, commentId);
+    deleteDoc(docRef).then(() => {
+      Alert.alert('Comment has been Deleted');
+      setDeleted(true);
+      setIsOpen(false);
+    });
+  };
 
   return (
     <ArticleContext.Provider
@@ -202,6 +210,7 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
         fetchCommentArticle,
         comments,
         setComments,
+        deleteComment
       }}>
       {children}
     </ArticleContext.Provider>

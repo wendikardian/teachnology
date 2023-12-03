@@ -88,7 +88,7 @@ const ReadArticle = (props: Props) => {
   }
 
   //   get fetchComment from context
-  const {fetchCommentArticle, comments, setComments} =
+  const {fetchCommentArticle, comments, setComments, deleteComment} =
     useContext(ArticleContext);
   useEffect(() => {
     setComments([]);
@@ -219,9 +219,40 @@ const ReadArticle = (props: Props) => {
                       </Text>
                     </View>
                   </View>
-                  <TouchableOpacity>
-                    <Ionicons name={'trash-outline'} color={'gray'} size={24} />
-                  </TouchableOpacity>
+                  {
+                    user?.uid == item.userId && (
+                        <TouchableOpacity
+                            onPress={() => {
+                                // ask first
+                                Alert.alert(
+                                    'Delete Comment',
+                                    'Are you sure want to delete this comment?',
+                                    [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => console.log('Cancel Pressed'),
+                                            style: 'cancel'
+                                        },
+                                        {
+                                            text: 'OK',
+                                            onPress: () => {
+                                                deleteComment(item.id);
+                                            }
+                                        }
+                                    ]
+                                )
+                            }}
+                        >
+                            <Ionicons
+                            name={'trash-outline'}
+                            color={'gray'}
+                            size={24}
+                            />
+                        </TouchableOpacity>
+                        )
+                        
+                  }
+         
                 </View>
               )}
             />

@@ -161,31 +161,17 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, props, onPress}) => {
             }}>
             <Ionicons name={'newspaper-outline'} color={'gray'} size={24} />
           </TouchableOpacity>
-          <Text
-            style={{
-              color: 'gray',
-              alignSelf: 'center',
-              paddingLeft: 12,
-            }}>
-            {item.likes}
-          </Text>
+          
         </View>
-        <View style={{flexDirection: 'row'}}>
+       
+       {
+        user.uid == item.userId ? (
           <TouchableOpacity>
-            <Ionicons name={'chatbubble-outline'} color={'gray'} size={24} />
-          </TouchableOpacity>
-          <Text
-            style={{
-              color: 'gray',
-              alignSelf: 'center',
-              paddingLeft: 12,
-            }}>
-            {item.comments}
-          </Text>
-        </View>
-        <TouchableOpacity>
-          <Ionicons name={'paper-plane-outline'} color={'gray'} size={24} />
+          <Ionicons name={'pencil'} color={'gray'} size={24} />
         </TouchableOpacity>
+        ) : null
+       }
+        
       </View>
     </View>
   );

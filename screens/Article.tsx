@@ -139,22 +139,7 @@ const Article = (props: Props) => {
       item={item}
       onDelete={handleDelete}
       props={props}
-      onPress={() => {
-        navigation.navigate('ReadArticle', {articles: {
-          articleTitle: item.articleTitle,
-          articleDescription: item.articleDescription,
-          articleImg: item.articleImg,
-          articleId: item.id,
-          userId: item.userId,
-          likes: item.likes,
-          comments: item.comments,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        }})
-        console.log(item.userId);
-      }}
     />
-    // <Text>{item.articleTitle}</Text>
   );
   const memoizedValue = useMemo(() => renderItem, [articles]);
   return (
@@ -176,22 +161,13 @@ const Article = (props: Props) => {
             placeholder={'What are you looking for?'}
             placeholderTextColor={'#AEAEAE'}
             value={search}
-            // onChangeText={text => setSearch(text)}
             onChangeText={text => {filterData(text)}}
           />
-          {/* {data.length > 0 ? null : ( */}
-
-          {/* )} */}
+    
         </View>
-        {/* <Text>
-
-          { articles.length > 0 ?
-          articles[0].articleTitle : 'No Articles'}
-        </Text> */}
 
         <View
           style={{
-            //  backgroundColor: 'red',
             padding: 30,
           }}>
           <FlatList
