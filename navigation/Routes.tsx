@@ -10,6 +10,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import EditPostScreen from '../screens/EditPostScreen';
 import AddArticle from '../screens/AddArticle';
 import ReadArticle from '../screens/ReadArticle';
+import EditArticleScreen from '../screens/EditArticleScreen';
 import {ArticleProvider} from '../context/ArticleProvider';
 
 const stack = createStackNavigator();
@@ -47,6 +48,11 @@ function Routes() {
                   <stack.Screen
                     name="ReadArticle"
                     component={ReadArticle}
+                    options={{headerShown: false, headerTitle: 'Edit'}}
+                  />
+                  <stack.Screen
+                    name="EditArticle"
+                    component={EditArticleScreen}
                     options={{headerShown: false, headerTitle: 'Edit'}}
                   />
                 </stack.Navigator>

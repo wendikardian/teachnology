@@ -166,7 +166,19 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, props, onPress}) => {
        
        {
         user.uid == item.userId ? (
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('EditArticle', {article: {
+              articleTitle: item.articleTitle,
+              articleDescription: item.articleDescription,
+              articleImg: item.articleImg,
+              articleId: item.id,
+              email: item.email,
+              userId: item.userId,
+              postTime : item.postTime,
+            }})
+          }}
+          >
           <Ionicons name={'pencil'} color={'gray'} size={24} />
         </TouchableOpacity>
         ) : null
