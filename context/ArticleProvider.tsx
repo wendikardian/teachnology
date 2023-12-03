@@ -27,6 +27,7 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
   const [articles, setArticles] = useState([]);
   const [users, setUsers] = useState();
   const [userPosts, setUserPosts] = useState();
+  const [comments, setComments] = useState();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
@@ -68,6 +69,52 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
 
           setArticles(list);
           console.log(articles);
+          setLoading(false);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchCommentArticle = async ( articleIdData : any ) => {
+
+    setLoading(true);
+    console.log('check_id', articleIdData);
+    try {
+      const q = query(
+        collection(firestore, 'comment_articles'),
+        orderBy('postTime', 'desc'),
+      );
+
+      onSnapshot(q, snapshot => {
+        const list: any = [];
+        snapshot.forEach(async doc => {
+          const {
+           articlesId,
+           comment,
+           email,
+           id, 
+           postTime,
+           userId,
+          } = doc.data();
+          // filter based on articleId
+          if (articlesId !== articleIdData) {
+            return;
+          }
+          await Promise.all(
+            list.push({
+              id: doc.id,
+              articleId: articlesId,
+              comment: comment,
+              email: email,
+              postTime: postTime,
+              userId: userId,
+            }),
+          );
+
+          setComments(list);
+          console.log(comments);
           setLoading(false);
         });
       });
@@ -152,6 +199,9 @@ export const ArticleProvider: React.FC<Types> = ({children}) => {
         users,
         setUsers,
         fetchUsers,
+        fetchCommentArticle,
+        comments,
+        setComments,
       }}>
       {children}
     </ArticleContext.Provider>

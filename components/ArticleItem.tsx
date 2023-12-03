@@ -79,7 +79,7 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, props, onPress}) => {
             <TouchableOpacity
               style={[styles.panelButton, {backgroundColor: 'crimson'}]}
               onPress={() => onDelete(item.id)}>
-              <Text style={styles.panelButtonTitle}>Delete Post</Text>
+              <Text style={styles.panelButtonTitle}>Delete Article</Text>
             </TouchableOpacity>
           ) : null}
           <TouchableOpacity

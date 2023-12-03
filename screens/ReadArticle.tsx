@@ -29,6 +29,7 @@ import {
 import {AuthContext} from '../context/AuthContext';
 import {useContext, useEffect, useState, useMemo} from 'react';
 import {Alert} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 interface Types {
   navigation: any;
   route: any;
@@ -45,7 +46,7 @@ const ReadArticle = (props: Props) => {
   const {articles} = route.params;
   const {user} = useContext(AuthContext);
   const [inputComment, setInputComment] = useState<string>('');
-    console.log(articles)
+  console.log(articles);
   const {userData} = useContext(UserContext);
   const [data, setData] = useState<any>([
     {
@@ -68,9 +69,9 @@ const ReadArticle = (props: Props) => {
       email: user?.email,
       comment: inputComment,
       postTime: Timestamp.fromDate(new Date()),
-      articlesId : articles.articleId,
+      articlesId: articles.articleId,
     }).then(() => {
-        setInputComment('');
+      setInputComment('');
       console.log('Comment has been published!');
       Alert.alert(
         'Comment Published!',
@@ -78,10 +79,26 @@ const ReadArticle = (props: Props) => {
       );
     });
   };
+  const filterComment = () => {
+    const filter = comments.filter(
+      (item: any) => item.articlesId == articles.articleId,
+    );
+    console.log('filter', filter)
+    return filter;
+  }
 
+  //   get fetchComment from context
+  const {fetchCommentArticle, comments, setComments} =
+    useContext(ArticleContext);
+  useEffect(() => {
+    setComments([]);
+    fetchCommentArticle(articles.articleId)
+  
+  }, []);
+  
   return (
     <View style={[styles.flexContainer, {paddingTop: '20%'}]}>
-      <View>
+      <ScrollView>
         <Text style={styles.xxlText}>{articles.articleTitle}</Text>
         <Text
           style={[
@@ -148,75 +165,69 @@ const ReadArticle = (props: Props) => {
               onChangeText={text => setInputComment(text)}
             />
             <TouchableOpacity
-                onPress={() => {
-                    handleSubmit();
-                }}
-            >
+              onPress={() => {
+                handleSubmit();
+              }}>
               <Ionicons name={'send-outline'} color={'gray'} size={24} />
             </TouchableOpacity>
           </View>
           <View>
             {/* comment section */}
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: 10,
-                backgroundColor: '#F5F5F5',
-                borderRadius: 10,
-                marginBottom: 10,
-                marginLeft: 10,
-              }}>
-              <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={{
-                    uri: 'https://picsum.photos/200/300',
-                  }}
+            <FlatList
+              data={comments}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <View
                   style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 20,
-                    marginRight: 10,
-                  }}
-                />
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                      color: 'black',
-                    }}>
-                    Wendi
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: '600',
-                      color: 'gray',
-                    }}>
-                    2 hours ago
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: '300',
-                      color: 'black',
-                      width: 250,
-                    }}>
-                    lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
-                  </Text>
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: 10,
+                    backgroundColor: '#F5F5F5',
+                    borderRadius: 10,
+                    marginBottom: 10,
+                    marginLeft: 10,
+                  }}>
+                  <View style={{flexDirection: 'row'}}>
+                   
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          color: 'black',
+                        }}>
+                        {item.email}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: '600',
+                          color: 'gray',
+                        }}>
+                       {/* convrt into like 2 days ago */}
+                          {moment(item.postTime.toDate()).fromNow()}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: '300',
+                          color: 'black',
+                          width: 250,
+                        }}>
+                        {item.comment}
+                      </Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity>
+                    <Ionicons name={'trash-outline'} color={'gray'} size={24} />
+                  </TouchableOpacity>
                 </View>
-              </View>
-              <TouchableOpacity>
-                <Ionicons name={'trash-outline'} color={'gray'} size={24} />
-              </TouchableOpacity>
-            </View>
+              )}
+            />
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
