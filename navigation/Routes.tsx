@@ -9,6 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import EditPostScreen from '../screens/EditPostScreen';
 import AddArticle from '../screens/AddArticle';
+import ReadArticle from '../screens/ReadArticle';
 
 const stack = createStackNavigator();
 function Routes() {
@@ -33,6 +34,7 @@ function Routes() {
                 />
                 <stack.Screen name="EditPost" component={EditPostScreen} options={{headerShown:true,headerTitle:"Edit"}}/>
                 <stack.Screen name="AddArticle" component={AddArticle} options={{headerShown:false,headerTitle:"Edit"}}/>
+                <stack.Screen name="ReadArticle" component={ReadArticle} options={{headerShown:false,headerTitle:"Edit"}}/>
               </stack.Navigator>
             </>
           ) : (

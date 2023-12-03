@@ -9,8 +9,10 @@ import React, {
   memo,
 } from 'react';
 import {PostContext} from '../context/PostContext';
-import { ArticleContext } from '../context/ArticleContext';
+import {ArticleContext} from '../context/ArticleContext';
 import Entypo from 'react-native-vector-icons/Entypo';
+// book icon
+
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../context/AuthContext';
@@ -23,11 +25,13 @@ var width = Dimensions.get('window').width;
 
 interface Types {
   onDelete?: any;
+  props?: any;
   onPress?: () => void;
   item?: any;
 }
-const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
+const ArticleItem: React.FC<Types> = ({item, onDelete, props, onPress}) => {
   const {isOpen, setIsOpen} = useContext(ArticleContext);
+  const {navigation} = props;
   const {user} = useContext(AuthContext);
 
   const [userData, setUserData] = useState<any>(null);
@@ -106,9 +110,7 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
                 {userData ? userData.lName || 'User' : 'User'}
               </Text>
             </TouchableOpacity>
-
           </View>
-          
         </View>
         <View style={styles.postIconContainer}>
           <TouchableOpacity
@@ -119,10 +121,17 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
         </View>
       </View>
       <View style={styles.postText}>
-        <Text style={{color: 'black'
-        , fontWeight: 'bold', fontSize: 20, marginBottom: 10, marginTop: 10
-    }}>{item.articleTitle}</Text>
-        <Text style={{color: 'black'}}>{item.articleDescription}</Text>
+        <Text
+          style={{
+            color: 'black',
+            fontWeight: 'bold',
+            fontSize: 20,
+            marginBottom: 10,
+            marginTop: 10,
+          }}>
+          {item.articleTitle}
+        </Text>
+        {/* <Text style={{color: 'black'}}>{item.articleDescription}</Text> */}
       </View>
       <View style={{alignSelf: 'center', marginTop: 12, zIndex: -1}}>
         {item.postImage !== null ? (
@@ -134,11 +143,24 @@ const ArticleItem: React.FC<Types> = ({item, onDelete, onPress}) => {
           />
         ) : null}
       </View>
-      
+
       <View style={styles.postBottom}>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity>
-            <Ionicons name={'paw-outline'} color={'gray'} size={24} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ReadArticle', {articles: {
+                articleTitle: item.articleTitle,
+                articleDescription: item.articleDescription,
+                articleImg: item.articleImg,
+                articleId: item.id,
+                userId: item.userId,
+                likes: item.likes,
+                comments: item.comments,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+              }})
+            }}>
+            <Ionicons name={'newspaper-outline'} color={'gray'} size={24} />
           </TouchableOpacity>
           <Text
             style={{

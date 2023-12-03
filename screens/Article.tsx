@@ -138,8 +138,19 @@ const Article = (props: Props) => {
     <ArticleItem
       item={item}
       onDelete={handleDelete}
+      props={props}
       onPress={() => {
-        navigation.navigate('User', {userId: item.userId});
+        navigation.navigate('ReadArticle', {articles: {
+          articleTitle: item.articleTitle,
+          articleDescription: item.articleDescription,
+          articleImg: item.articleImg,
+          articleId: item.id,
+          userId: item.userId,
+          likes: item.likes,
+          comments: item.comments,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+        }})
         console.log(item.userId);
       }}
     />
@@ -193,6 +204,7 @@ const Article = (props: Props) => {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             renderItem={memoizedValue}
+            
           />
         </View>
         {/* Create button to create article */}
