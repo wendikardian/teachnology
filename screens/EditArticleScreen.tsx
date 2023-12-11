@@ -55,6 +55,7 @@ const EditArticleScreen = (props: any) => {
     });
   };
   const handleUpdate = async () => {
+    navigation.goBack();
     setDoc(doc(firestore, 'articles', article.articleId), {
         articleTitle: articleTitle,
         articleDescription: articleDescription,
@@ -63,6 +64,7 @@ const EditArticleScreen = (props: any) => {
         postTime : article.postTime,
         userId : article.userId,
     }).then(() => {
+      
       console.log('Article has beed updated!');
       Alert.alert(
         'Article has beed updated!',

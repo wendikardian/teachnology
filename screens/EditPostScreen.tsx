@@ -23,8 +23,10 @@ const EditPostScreen: React.FC<Params> = ({route, navigation}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const submitPost = async () => {
+    navigation.navigate('Home');
     try {
       const imageUrl = await uploadImage();
+     
       await addDoc(collection(firestore, 'posts'), {
         
         // createRandomgeneratedId int must unique
@@ -37,6 +39,7 @@ const EditPostScreen: React.FC<Params> = ({route, navigation}) => {
         likes: null,
         comments: null,
       });
+      setText('');
     } catch (error) {
       console.log(error);
     } finally {
@@ -53,6 +56,8 @@ const EditPostScreen: React.FC<Params> = ({route, navigation}) => {
     const img = await fetch(uploadUri);
     const bytes = await img.blob();
     setLoading(true);
+    // clear data
+ 
     try {
       await uploadBytes(docRef, bytes);
       Alert.alert('Post published');

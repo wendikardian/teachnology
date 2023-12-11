@@ -28,7 +28,8 @@ import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {UserContext} from '../context/UserContext';
 import styles from '../config/Styles';
 
-const AddArticle = () => {
+const AddArticle = (props: any) => {
+  const {navigation, route} = props;
   const {userData, getUser, setUserData} = useContext(UserContext);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const {user} = useContext(AuthContext);
@@ -63,6 +64,7 @@ const AddArticle = () => {
     });
   };
   const handleSubmit = async () => {
+    navigation.goBack();
     let imgUrl = await uploadImage();
 
     if (imgUrl == null && userData.userImg) {
@@ -79,6 +81,11 @@ const AddArticle = () => {
       articleDescription: articleDescription,
       postTime: Timestamp.fromDate(new Date()),
     }).then(() => {
+      // clear data
+      setArticleTitle('');
+      setArticleDescription('');
+      setImage(null);
+      // navigate to home
       console.log('Articles has been published!');
       Alert.alert(
         'Article Published!',
